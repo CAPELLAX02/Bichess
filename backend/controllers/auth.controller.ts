@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response } from 'express';
 
 const users = [
@@ -13,11 +13,9 @@ export const login = (req: Request, res: Response) => {
   );
 
   if (user) {
-    const token = jwt.sign(
-      { username },
-      process.env.JWT_SECRET || 'your_jwt_secret',
-      { expiresIn: '1h' }
-    );
+    const token = jwt.sign({ username }, process.env.JWT_SECRET as string, {
+      expiresIn: '1h',
+    });
     return res.json({ token });
   }
   return res.status(401).json({ message: 'Invalid credentials' });
