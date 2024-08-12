@@ -19,6 +19,28 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // Socket.io connection
 io.on('connection', (socket: Socket) => {
   console.log(`User (${socket.id}) connected.`);
+
+  // Create game room
+  socket.on('createGame', (room: string) => {
+    socket.join(room);
+    console.log(`Room (${room}) created.`);
+  });
+
+  // Join the room
+  socket.on('joinGame', (room: string) => {
+    socket.join(room);
+    console.log(`Joined the room - ${room}`);
+  });
+
+  // Maka move
+  socket.on('move', (data: { room: string; move: string }) => {
+    io.to(data.room).emit('move', data.move);
+  });
+
+  // Disconnection
+  socket.on('disconnect', () => {
+    console.log(`User (${socket.id}) disconnected.`);
+  });
 });
 
 // Simple error handler middleware
