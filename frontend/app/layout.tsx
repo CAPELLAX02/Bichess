@@ -8,7 +8,7 @@ const pop = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'BiChess',
+  title: 'Bichess',
   description: 'Your online chess platform.',
 };
 

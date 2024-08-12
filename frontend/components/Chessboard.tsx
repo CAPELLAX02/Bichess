@@ -1,78 +1,74 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import socket from '../sockets/socket';
-import { Chess } from '../lib/chess-0.10.3.min';
 
-const ChessboardComponent: React.FC = () => {
+const Chessboard: React.FC = () => {
   const [board, setBoard] = useState<any>(null);
-  const game = new Chess();
+  const [game, setGame] = useState<any>(null);
 
   useEffect(() => {
-    // Load chessboard.js as a global script
-    const script = document.createElement('script');
-    script.src = '/lib/chessboard-1.0.0.min.js';
-    script.async = true;
-    script.onload = () => {
-      // Now chessboard.js is available globally
-      const Chessboard = (window as any).Chessboard;
-      const config = {
-        draggable: true,
-        position: 'start',
-        onDragStart: onDragStart,
-        onDrop: onDrop,
-        onSnapEnd: onSnapEnd,
-        pieceTheme: '/images/chesspieces/{piece}.png',
-      };
-      const boardInstance = Chessboard('myBoard', config);
-      setBoard(boardInstance);
-    };
-    document.body.appendChild(script);
-
-    socket.on('newMove', (move: { from: string; to: string }) => {
-      game.move(move);
-      if (board) {
-        board.position(game.fen());
+    const initializeGame = () => {
+      if (typeof window !== 'undefined' && window.Chess && window.Chessboard) {
+        const chessGame = new window.Chess();
+        const boardInstance = window.Chessboard('myBoard', {
+          draggable: true,
+          position: 'start',
+          onDragStart: onDragStart,
+          onDrop: onDrop,
+          onSnapEnd: onSnapEnd,
+          pieceTheme: '/images/chesspieces/{piece}.png',
+        });
+        setGame(chessGame);
+        setBoard(boardInstance);
       }
-    });
-
-    return () => {
-      socket.off('newMove');
-      document.body.removeChild(script);
     };
-  }, [board]);
 
-  function onDragStart(source: string, piece: string) {
-    if (game.game_over() || piece.search(/^b/) !== -1) {
-      return false;
-    }
+    const loadScripts = () => {
+      const jqueryScript = document.createElement('script');
+      jqueryScript.src = '/jquery-3.7.0.min.js';
+      jqueryScript.onload = () => {
+        const chessScript = document.createElement('script');
+        chessScript.src = '/chess-0.10.3.min.js';
+        chessScript.onload = () => {
+          const boardScript = document.createElement('script');
+          boardScript.src = '/chessboard-1.0.0.min.js';
+          boardScript.onload = initializeGame;
+          document.body.appendChild(boardScript);
+        };
+        document.body.appendChild(chessScript);
+      };
+      document.body.appendChild(jqueryScript);
+    };
+
+    loadScripts();
+  }, []);
+
+  const onDragStart = (source: string, piece: string) => {
+    if (game?.game_over()) return false;
     return true;
-  }
+  };
 
-  function onDrop(source: string, target: string) {
-    const move = game.move({
+  const onDrop = (source: string, target: string) => {
+    const move = game?.move({
       from: source,
       to: target,
       promotion: 'q',
     });
 
     if (move === null) return 'snapback';
+  };
 
-    socket.emit('move', { from: source, to: target });
-    updateStatus();
-  }
-
-  function onSnapEnd() {
-    if (board) {
+  const onSnapEnd = () => {
+    if (board && game) {
       board.position(game.fen());
     }
-  }
+  };
 
-  function updateStatus() {
-    // Implement game status updates if needed
-  }
-
-  return <div id='myBoard' style={{ width: '400px' }} />;
+  return (
+    <div>
+      <div id='myBoard' style={{ width: '400px' }} />
+    </div>
+  );
 };
 
-export default ChessboardComponent;
+export default Chessboard;

@@ -1,5 +1,5 @@
-declare module '../lib/chess-0.10.3.min' {
-  export class Chess {
+declare global {
+  class Chess {
     constructor(fen?: string);
     move(move: {
       from: string;
@@ -16,3 +16,5 @@ declare module '../lib/chess-0.10.3.min' {
     reset(): void;
   }
 }
+
+export {};
