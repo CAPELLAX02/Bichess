@@ -3,6 +3,7 @@ dotenv.config();
 import express, { Application, Request, Response, NextFunction } from 'express';
 import http from 'http';
 import { Server as SocketIoServer, Socket } from 'socket.io';
+import cors from 'cors';
 
 import { login } from './controllers/auth.controller';
 
@@ -15,6 +16,8 @@ const io = new SocketIoServer(server, {
     methods: ['GET', 'POST'],
   },
 });
+
+app.use(cors());
 
 app.use(express.json());
 
@@ -51,6 +54,10 @@ io.on('connection', (socket: Socket) => {
   socket.on('disconnect', () => {
     console.log(`User (${socket.id}) disconnected.`);
   });
+});
+
+app.get('/', (req: Request, res: Response, next: NextFunction) => {
+  res.send('API is running...');
 });
 
 // Simple error handler middleware
