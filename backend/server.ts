@@ -1,9 +1,10 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express, { Application, Request, Response, NextFunction } from 'express';
 import http from 'http';
 import { Server as SocketIoServer, Socket } from 'socket.io';
-import dotenv from 'dotenv';
 
-dotenv.config();
+import { login } from './controllers/auth.controller';
 
 // Initialize application and socket server
 const app: Application = express();
@@ -16,6 +17,8 @@ const io = new SocketIoServer(server, {
 });
 
 app.use(express.json());
+
+app.post('/api/login', login);
 
 // Logger middleware
 app.use((req: Request, res: Response, next: NextFunction) => {
