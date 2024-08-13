@@ -1,26 +1,134 @@
-<html>
-    <head>
-        {{> head}}
-    </head>
-    <body>
-        <h2>Game code</h2>
-        <input type="text" id="codeInput">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Bichess</title>
+    {{> head}}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        font-family: 'Poppins', sans-serif;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #02002e, #000);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .container {
+        text-align: center;
+      }
+
+      h1 {
+        color: #fff;
+        font-size: 36px;
+        margin-bottom: 10px;
+      }
+
+      h3 {
+        color: #fff;
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
+
+      #codeInput {
+        width: 250px;
+        padding: 10px 16px;
+        margin-bottom: 20px;
+        border: 2px solid #fff;
+        border-radius: 40px;
+        font-size: 16px;
+        background: transparent;
+        color: #fff;
+        font-weight: 600;
+      }
+
+      #codeInput::placeholder {
+        color: #eee; /* Beyaz placeholder rengi */
+      }
+
+      .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 40px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s, transform 0.2s;
+        font-weight: 600;
+      }
+
+      #createGame {
+        background-color: #007bff;
+        color: white;
+      }
+
+      #createGame:hover {
+        background-color: #0056b3;
+        transform: scale(1.05); /* Hover efektinde büyüme */
+      }
+
+      #joinGame {
+        background-color: #28a745;
+        color: white;
+      }
+
+      #joinGame:hover {
+        background-color: #1e7e34;
+        transform: scale(1.05); /* Hover efektinde büyüme */
+      }
+
+      #errorMessage {
+        margin-top: 15px;
+        font-size: 14px;
+        color: red;
+      }
+
+      input:focus,
+      button:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+        border: 2px solid rgba(81, 203, 238, 1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome to Bichess!</h1>
+      <h3>Enter a game code either to create a game or join a game</h3>
+      <input type="text" id="codeInput" placeholder="Enter game code..." />
+      <div class="button-group">
         <button id="createGame">Create game</button>
         <button id="joinGame">Join game</button>
-        <div style="color: red" id="errorMessage"></div>
+      </div>
+      <div id="errorMessage"></div>
+    </div>
 
-        <script>
-            $('#createGame').on('click', function() {
-                window.location.replace('/white?code=' + $('#codeInput').val());
-            });
-            $('#joinGame').on('click', function() {
-                window.location.replace('/black?code=' + $('#codeInput').val());
-            });
+    <script>
+      $('#createGame').on('click', function () {
+        window.location.replace('/white?code=' + $('#codeInput').val());
+      });
+      $('#joinGame').on('click', function () {
+        window.location.replace('/black?code=' + $('#codeInput').val());
+      });
 
-            var urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('error') == 'invalidCode') {
-                $('#errorMessage').text('Invalid invite code');
-            }
-        </script>
-    </body>
+      var urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('error') == 'invalidCode') {
+        $('#errorMessage').text('Invalid invite code');
+      }
+    </script>
+  </body>
 </html>

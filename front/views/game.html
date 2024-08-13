@@ -1,20 +1,78 @@
-<html>
-    <head>
-        {{> head}}
-    </head>
-    <body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Bichess</title>
+    {{> head}}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        font-family: 'Poppins', sans-serif;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #02002e, #000);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+        margin: 0;
+        color: #fff;
+      }
 
-        <div id="myBoard" style="width: 700px"></div>
-        <label>Status:</label>
-        <div id="status"></div>
-        <label>PGN:</label>
-        <div id="pgn"></div>
+      #myBoard {
+        width: 60%; /* Tahtayı küçülttük */
+        max-width: 500px; /* Maksimum genişliği daha da küçülttük */
+        aspect-ratio: 1; /* Genişlik ve yüksekliği orantılı yapar */
+        margin-bottom: 20px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+      }
 
-        <script>
-            let playerColor = '{{color}}';
-            console.log('Playing as ' + playerColor);
-        </script>
-        <script src="/public/js/index.js"></script>
+      label {
+        font-size: 18px;
+        font-weight: bold;
+      }
 
-    </body>
+      #status,
+      #pgn {
+        max-width: 400px;
+        padding: 8px 15px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 40px;
+        margin-bottom: 20px;
+        overflow-x: hidden;
+        word-wrap: break-word;
+        font-size: 14px;
+      }
+
+      #status {
+        color: #dadada;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      #pgn {
+        color: #fff;
+        font-family: 'Courier New', Courier, monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="myBoard"></div>
+    <label>Status</label>
+    <div id="status"></div>
+    <label>Moves</label>
+    <div id="pgn"></div>
+
+    <script>
+      let playerColor = '{{color}}';
+      console.log('Playing as ' + playerColor);
+    </script>
+    <script src="/public/js/index.js"></script>
+  </body>
 </html>
